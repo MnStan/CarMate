@@ -1,0 +1,10 @@
+.button {
+    width: fit-content;
+    padding: var(--m-0-5) 3rem;
+    color: var(--black-text);
+    background-color: var(--primary);
+    border-radius: 10px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: var(--default-transition);
+}
