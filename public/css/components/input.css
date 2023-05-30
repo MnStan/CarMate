@@ -1,0 +1,35 @@
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 60%;
+    min-width: 20rem;
+    border: 2px solid var(--grey-400);
+    border-radius: 15px;
+}
+
+.input-icon {
+    height: 15%;
+    width: 15%;
+    padding: var(--m-1);
+}
+
+.input {
+    flex: 1;
+    background: none;
+    outline: none;
+    border: none;
+    border-bottom: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    padding: var(--m-1);
+}
+
+.input:hover,
+.input:focus {
+    border-bottom: none;
+}
+
+.input-container:hover,
+.input-container:focus-within {
+    border: 2px solid var(--black);
+}
