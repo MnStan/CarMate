@@ -26,7 +26,7 @@ $formContent = [
     'content' => Input($inputEmail) . Input($inputPassword)
 ];
 
-$cardContent = Form($formContent) . "<div class='text-center'>Nie masz konta?</div>";
+$cardContent = Form($formContent) . '<a class="text-center" href="register">Nie nasz jeszcze konta?</a>';
 
 $cardArray = [
     'title' => 'Logowanie',
@@ -48,6 +48,7 @@ $buttonArray = [
 </head>
 
 <body>
+<?php include("public/views/components/navbar.php"); ?>
 <main class="login-container container flex flex-center flex-column">
     <?php echo Card($cardArray); ?>
     <?php echo Button($buttonArray); ?>

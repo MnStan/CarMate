@@ -18,10 +18,11 @@ $registerButtonArray = [
 
 <head> 
     <?php include("public/views/components/headImports.php"); ?>
-    <title>Login</title>
+    <title>Login or register</title>
 </head>
 
 <body>
+<?php include("public/views/components/navbar.php"); ?>
 <main class="info-container container flex flex-center">
     <div class="photo-container">
     <img class="photo drop-shadow" src="public/img/photos/funny-old-family-driving.jpg">
