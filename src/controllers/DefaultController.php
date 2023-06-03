@@ -12,6 +12,10 @@ class DefaultController extends AppController {
         $this->render('register');
     }
 
+    public function unloggedMain() {
+        $this->render('unloggedMain');
+    }
+
     public function carList() {
         // TODO display carList.html
         die("carList method");
