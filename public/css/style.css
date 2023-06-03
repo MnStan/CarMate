@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap'); */
 
 @import "./variables/variables.css";
 @import "./components/form.css";
@@ -8,6 +8,7 @@
 @import "./login.css";
 @import "./register.css";
 @import "./unloggedMain.css";
+@import "./components/navbar.css";
 
 * {
     box-sizing: border-box;
@@ -72,6 +73,16 @@ h6 {
 
 .text-center {
     text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: var(--black-text);
+}
+
+a:link, a:visited {
+    color: inherit;
+    color: var(--black-text);
 }
 
 .drop-shadow {

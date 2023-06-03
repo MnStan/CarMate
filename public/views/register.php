@@ -56,6 +56,7 @@ $buttonArray = [
 </head>
 
 <body>
+<?php include("public/views/components/navbar.php"); ?>
 <main class="login-container container flex flex-center flex-column">
     <?php echo Card($cardArray); ?>
     <?php echo Button($buttonArray); ?>
