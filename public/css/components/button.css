@@ -1,5 +1,6 @@
 .button {
-    width: fit-content;
+    width: 15rem;
+    height: 3rem;
     padding: var(--m-0-5) 3rem;
     color: var(--black-text);
     background-color: var(--primary);
