@@ -68,4 +68,8 @@
     .navbar-list-d-none-sx {
         display: none;
     }
+
+    .navbar-brand {
+        justify-content: center;
+    }
 }
