@@ -9,6 +9,8 @@
 @import "./register.css";
 @import "./unloggedMain.css";
 @import "./components/navbar.css";
+@Import "./main.css";
+@import "./components/carCard.css";
 
 * {
     box-sizing: border-box;

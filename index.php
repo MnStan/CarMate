@@ -9,5 +9,5 @@ Routing::get('', 'DefaultController');
 Routing::get('login', 'DefaultController');
 Routing::get('register', 'DefaultController');
 Routing::get('unloggedMain', 'DefaultController');
-Routing::get('cars', 'DefaultController');
+Routing::get('main', 'DefaultController');
 Routing::run($path);
