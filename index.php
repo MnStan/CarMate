@@ -10,4 +10,6 @@ Routing::get('login', 'DefaultController');
 Routing::get('register', 'DefaultController');
 Routing::get('unloggedMain', 'DefaultController');
 Routing::get('main', 'DefaultController');
+Routing::get('info', 'DefaultController');
+Routing::get('bookCar', 'DefaultController');
 Routing::run($path);

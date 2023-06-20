@@ -11,6 +11,10 @@
 @import "./components/navbar.css";
 @Import "./main.css";
 @import "./components/carCard.css";
+@import "./carInfo.css";
+@import "./components/rentInfoBean.css";
+@import "./carInfo.css";
+@import "./bookCar.css";
 
 * {
     box-sizing: border-box;
