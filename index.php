@@ -12,4 +12,5 @@ Routing::get('unloggedMain', 'DefaultController');
 Routing::get('main', 'DefaultController');
 Routing::get('info', 'DefaultController');
 Routing::get('bookCar', 'DefaultController');
+Routing::get('addCar', 'DefaultController');
 Routing::run($path);
