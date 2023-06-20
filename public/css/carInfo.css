@@ -1,0 +1,43 @@
+.rent-info-container {
+    gap: 2rem;
+}
+
+.info-info {
+    display: flex;
+    text-align: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 14px;
+    z-index: 9999;
+}
+
+@media screen and (max-width: 700px) {
+    .rent-info-container {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .rent-info-container {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .info-info > div {
+        flex-basis: 100%;
+    }
+
+    .rent-info-container {
+        width: 100%;
+    }
+}

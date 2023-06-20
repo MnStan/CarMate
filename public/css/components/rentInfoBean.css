@@ -1,0 +1,10 @@
+.info-title {
+    border-radius: 10px;
+    background-color: var(--primary);
+    text-align: center;
+}
+
+.info-title-content {
+    margin: 0;
+    padding: 0.5rem;
+}

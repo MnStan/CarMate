@@ -19,4 +19,12 @@ class DefaultController extends AppController {
     public function main() {
         $this->render('main');
     }
+
+    public function info() {
+        $this->render('carInfo');
+    }
+
+    public function bookCar() {
+        $this->render('bookCar');
+    }
 }
