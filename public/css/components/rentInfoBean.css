@@ -8,3 +8,11 @@
     margin: 0;
     padding: 0.5rem;
 }
+
+.editable {
+    background-color: transparent;
+    border: none;
+    font-size: inherit;
+    color: inherit;
+    text-align: center;
+}

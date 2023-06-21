@@ -23,10 +23,34 @@ $addCarAndPreview = '
     <img id="car-preview" class="car-preview" src="#" alt="Podgląd" style="display: none";>
 ';
 
+$plusButtonArray = [
+    'value' => '+',
+    'id' => 'add-car-info'
+];
+
+$secondPlusButtonArray = [
+    'value' => '+',
+    'id' => 'add-rent-info'
+];
+
 $formContent = [
     'action' => '',
     'method' => 'POST',
     'content' => $addCarAndPreview
+];
+
+$carRentInfoElements = [
+    RentInfo('Marka', 'true'),
+    RentInfo('Model', 'true'),
+    RentInfo('Pojemność silnika', 'true'),
+    RentInfo('moc', 'true'),
+    RentInfo('przebieg', 'true')
+];
+
+$RentInfoElements = [
+    RentInfo('Maksymalny przebieg', 'true'),
+    RentInfo('Z właścicielem?', 'true'),
+    RentInfo('Maksymalny czas', 'true'),
 ];
 
 ?>
@@ -35,7 +59,8 @@ $formContent = [
 
 <head>
     <?php include("public/views/components/headImports.php"); ?>
-    <script src="public/js/preview-interactions.js" defer></script>    
+    <script src="public/js/preview-interactions.js" defer></script>
+    <script src="public/js/addRentInfo.js" defer></script>
     <title>Informacje</title>
 </head>
 
@@ -58,29 +83,30 @@ $formContent = [
                 <h3>
                     Informacje o samochodzie
                 </h3>
-                <div class="info-info flex flex-row">
-                    <?php echo RentInfo('Toyota', 'Testowanie tooltip'); ?>
-                    <?php echo RentInfo('Chaser'); ?>
-                    <?php echo RentInfo('JZX100'); ?>
-                    <?php echo RentInfo('3litry'); ?>
-                    <?php echo RentInfo('400km'); ?>
-                    <?php echo RentInfo('56893km'); ?>
-                    <?php echo RentInfo('Toyota', 'Testowanie tooltip'); ?>
-                    <?php echo RentInfo('Chaser'); ?>
-                    <?php echo RentInfo('JZX100'); ?>
-                    <?php echo RentInfo('3litry'); ?>
-                    <?php echo RentInfo('400km'); ?>
-                    <?php echo RentInfo('56893km'); ?>
+                <div class="info-info flex flex-row" id="car-info-container">
+                    <?php foreach ($carRentInfoElements as $element) {
+                        echo $element;
+                    } 
+                    ?>
+                </div>
+
+                <div class="center-button">
+                    <?php echo Button($plusButtonArray); ?>
                 </div>
 
                 <h3>
                     Warunki
                 </h3>
-                <div class="info-info flex flex-row">
-                    <?php echo RentInfo('100 km'); ?>
-                    <?php echo RentInfo('tylko z właścicielem'); ?>
-                    <?php echo RentInfo('2 godziny'); ?>
+                <div class="info-info flex flex-row" id="rent-info-container">
+                <?php foreach ($RentInfoElements as $element) {
+                        echo $element;
+                    } ?>
                 </div>
+
+                <div class="center-button">
+                    <?php echo Button($secondPlusButtonArray); ?>
+                </div>
+
             </div>
         </div>
         <?php echo Button($buttonArrayCarInfo); ?>
