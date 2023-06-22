@@ -15,6 +15,7 @@
 @import "./components/rentInfoBean.css";
 @import "./carInfo.css";
 @import "./bookCar.css";
+@import "./addCar.css";
 
 * {
     box-sizing: border-box;

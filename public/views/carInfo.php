@@ -40,13 +40,13 @@ $buttonArrayCarInfo = [
                     Informacje o samochodzie
                 </h3>
                 <div class="info-info flex flex-row">
-                    <?php echo RentInfo('Toyota', 'Testowanie tooltip'); ?>
+                    <?php echo RentInfo('Toyota'); ?>
                     <?php echo RentInfo('Chaser'); ?>
                     <?php echo RentInfo('JZX100'); ?>
                     <?php echo RentInfo('3litry'); ?>
                     <?php echo RentInfo('400km'); ?>
                     <?php echo RentInfo('56893km'); ?>
-                    <?php echo RentInfo('Toyota', 'Testowanie tooltip'); ?>
+                    <?php echo RentInfo('Toyota'); ?>
                     <?php echo RentInfo('Chaser'); ?>
                     <?php echo RentInfo('JZX100'); ?>
                     <?php echo RentInfo('3litry'); ?>
