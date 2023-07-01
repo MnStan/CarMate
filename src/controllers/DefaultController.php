@@ -31,4 +31,8 @@ class DefaultController extends AppController {
     public function addCar() {
         $this->render('addCar');
     }
+
+    public function rentDone() {
+        $this->render('rentDone');
+    }
 }
