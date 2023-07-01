@@ -2,7 +2,9 @@
     <div class="drop-shadow">
         <nav class="nav container">
             <div class="navbar-brand">
-                <img class="navbar-brand-logo" src="public/img/logo/CarMateLogo.svg" alt="Logo CarMate">
+                <a href="main">
+                    <img class="navbar-brand-logo" src="public/img/logo/CarMateLogo.svg" alt="Logo CarMate">
+                </a>
             </div>
             <?php
                 echo '
