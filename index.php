@@ -13,4 +13,5 @@ Routing::get('main', 'DefaultController');
 Routing::get('info', 'DefaultController');
 Routing::get('bookCar', 'DefaultController');
 Routing::get('addCar', 'DefaultController');
+Routing::get('rentDone', 'DefaultController');
 Routing::run($path);
