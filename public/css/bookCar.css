@@ -11,10 +11,6 @@ input[type="date"] {
   form {
     margin-top: 1.5rem;
   }
-  
-  form div {
-    margin-bottom: 1.5rem;
-  }
 
   input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
