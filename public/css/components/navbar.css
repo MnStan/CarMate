@@ -65,11 +65,7 @@
 }
 
 @media screen and (max-width: 600px) {
-    .navbar-list-d-none-sx {
-        display: none;
-    }
-
     .navbar-brand {
-        justify-content: center;
+        justify-content: right;
     }
 }

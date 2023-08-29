@@ -24,6 +24,11 @@
     padding: var(--m-1);
 }
 
+.input-text-primary {
+    background-color: inherit;
+    border: 1.5px solid white;
+}
+
 .input:hover,
 .input:focus {
     border-bottom: none;
