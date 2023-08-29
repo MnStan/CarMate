@@ -15,6 +15,7 @@ $SessionController = new SessionController();
             <div class="navbar-list-d-none-sx">
                 <?php
                 if ($SessionController::isLogged()) {
+                    echo '<a href="addCar">Dodaj Pojazd</a>';
                     echo '<a href="logout">Wyloguj</a>';
                 } else {
                     echo '<a href="login">Zaloguj</a>';
