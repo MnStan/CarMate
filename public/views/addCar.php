@@ -6,6 +6,13 @@ require_once "public/views/components/button.php";
 require_once "public/views/components/form.php";
 require_once "public/views/components/input.php";
 
+$SessionController = new SessionController();
+$userIsAuthenticated = $SessionController::isLogged();
+
+if ($SessionController::isLogged() === false) {
+    $SessionController->redirectToLogin();
+}
+
 $addButtonArray = [
     'value' => 'Dodaj obrazek'
 ];

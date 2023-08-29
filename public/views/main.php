@@ -6,6 +6,9 @@ require_once "public/views/components/card.php";
 require_once "public/views/components/carCard.php";
 require_once "public/views/components/button.php";
 
+$SessionController = new SessionController();
+$userIsAuthenticated = $SessionController::isLogged();
+
 $searchInput = [
     'type' => 'text',
     'name' => 'search',

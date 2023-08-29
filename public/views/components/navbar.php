@@ -1,3 +1,9 @@
+<?php
+
+$SessionController = new SessionController();
+
+?>
+
 <header class="header" id="header">
     <div class="drop-shadow">
         <nav class="nav container">
@@ -6,14 +12,16 @@
                     <img class="navbar-brand-logo" src="public/img/logo/CarMateLogo.svg" alt="Logo CarMate">
                 </a>
             </div>
-            <?php
-                echo '
-                <div class="navbar-list-d-none-sx">
-                <a href="login">Zaloguj</a>
-                <a href="register">Zarejestruj</a>
-                </div>
-                ';
-            ?>
+            <div class="navbar-list-d-none-sx">
+                <?php
+                if ($SessionController::isLogged()) {
+                    echo '<a href="logout">Wyloguj</a>';
+                } else {
+                    echo '<a href="login">Zaloguj</a>';
+                    echo '<a href="register">Zarejestruj</a>';
+                }
+                ?>
+            </div>
         </nav>
     </div>
 </header>
