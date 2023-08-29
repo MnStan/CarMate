@@ -36,6 +36,3 @@ class Database
         }
     }
 }
-
-$new = new Database;
-$new->connect();

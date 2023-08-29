@@ -5,6 +5,11 @@ require_once "public/views/components/form.php";
 require_once "public/views/components/card.php";
 require_once "public/views/components/button.php";
 
+$SessionController = new SessionController();
+if ($SessionController::isLogged()) {
+    $SessionController->redirectToHome();
+}
+
 $inputEmail = [
     'type' => 'name',
     'name' => 'email',
@@ -20,10 +25,15 @@ $inputPassword = [
     'image' => 'public/img/input/lock-solid.svg',
 ];
 
+$buttonArray = [
+    'type' => 'submit',
+    'value' => 'zaloguj'
+];
+
 $formContent = [
     'action' => 'checkLogin',
     'method' => 'POST',
-    'content' => Input($inputEmail) . Input($inputPassword)
+    'content' => Input($inputEmail) . Input($inputPassword) . Button($buttonArray)
 ];
 
 $cardContent = Form($formContent) . '<a class="text-center" href="register">Nie nasz jeszcze konta?</a>';
@@ -33,26 +43,22 @@ $cardArray = [
     'content' => $cardContent
 ];
 
-$buttonArray = [
-    'type' => 'submit',
-    'value' => 'zaloguj'
-];
+
 
 ?>
 
 <html lang="en">
 
-<head> 
+<head>
     <?php include("public/views/components/headImports.php"); ?>
     <title>Login</title>
 </head>
 
 <body>
-<?php include("public/views/components/navbar.php"); ?>
-<main class="login-container container flex flex-center flex-column">
-    <?php echo Card($cardArray); ?>
-    <?php echo Button($buttonArray); ?>
-</main>
+    <?php include("public/views/components/navbar.php"); ?>
+    <main class="login-container container flex flex-center flex-column">
+        <?php echo Card($cardArray); ?>
+    </main>
 </body>
 
 </html>
