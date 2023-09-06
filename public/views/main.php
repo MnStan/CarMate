@@ -9,6 +9,9 @@ require_once "public/views/components/button.php";
 $SessionController = new SessionController();
 $userIsAuthenticated = $SessionController::isLogged();
 
+$carController = new CarController();
+$cars = $carController->getCars(1);
+
 $searchInput = [
     'type' => 'text',
     'name' => 'search',
@@ -22,21 +25,11 @@ $formContent = [
     'content' => Input($searchInput)
 ];
 
-$cardContent = Form($formContent);
+$cardContent = Form($formContent, null);
 
 $cardArray = [
     'title' => 'Znajdź samochód dla siebie',
     'content' => $cardContent
-];
-
-$image = '<img src="public/img/photos/toyota.jpg">';
-
-$cardContent2 = $image;
-
-$cardArray2 = [
-    'content' => $cardContent2,
-    'car-name' => 'Toyota Chaser JZX100',
-    'car-price' => 'od 1000zł'
 ];
 
 ?>
@@ -52,13 +45,27 @@ $cardArray2 = [
     <?php include("public/views/components/navbar.php"); ?>
     <main class="container flex flex-center flex-column" style="gap: 1.5rem">
         <?php echo Card($cardArray); ?>
-        <?php echo CarCard($cardArray2); ?>
-        <?php echo CarCard($cardArray2); ?>
-        <?php echo CarCard($cardArray2); ?>
-        <?php echo CarCard($cardArray2); ?>
-        <?php echo CarCard($cardArray2); ?>
-        <?php echo CarCard($cardArray2); ?>
+
+        <?php if (!empty($cars)) : ?>
+            <?php foreach ($cars as $car) : ?>
+                <?php
+                $image = '<img src="public/uploads/' . $car->getCarInfo()->getDirectoryUrl() . '/' . $car->getCarInfo()->getAvatarUrl() . '">';
+                $cardContent2 = $image;
+                $cardArray2 = [
+                    'content' => $cardContent2,
+                    'car-name' => $car->getCarInfo()->getName(),
+                    'car-localization' => $car->getCityName(),
+                ];
+                ?>
+
+                <?php echo CarCard($cardArray2); ?>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <p>Brak dostępnych samochodów.</p>
+        <?php endif; ?>
+
     </main>
 </body>
+
 
 </html>

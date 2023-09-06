@@ -112,7 +112,6 @@ class UserRepository extends Repository
 
         return (bool) $user;
     }
-
     public function addUser(string $email, string $password, string $name, string $surname, string $phone, string $address, int $city_id): void
     {
         $user_id = $this->getNextId('users', 'user_id');
@@ -156,4 +155,5 @@ class UserRepository extends Repository
             $city_id
         ]);
     }
+    
 }

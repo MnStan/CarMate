@@ -16,7 +16,6 @@ $buttonArrayCarInfo = [
 
 <head>
     <?php include("public/views/components/headImports.php"); ?>
-    <script src="public/js/tooltipInfo.js" defer></script>
     <title>Informacje</title>
 </head>
 

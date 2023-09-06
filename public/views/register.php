@@ -73,12 +73,14 @@ $selectCity .= '</select>
             </div></div>';
 
 $formContent = [
-    'action' => 'checkLogin',
+    'action' => 'checkRegister',
     'method' => 'POST',
     'content' => Input($inputName) . Input($inputSurame) . Input($inputEmail) . Input($inputPassword) . Input($inputPhone) . $selectCity . Input($inputAdress) . Button($buttonArray)
 ];
 
-$cardContent = Form($formContent);
+$onSubmitFunction = 'validateRegisterForm';
+
+$cardContent = Form($formContent, $onSubmitFunction);
 
 $cardArray = [
     'title' => 'Rejestracja',

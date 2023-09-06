@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     width: 60%;
+    max-width: 100px;
     min-width: 20rem;
     border: 2px solid var(--grey-400);
     border-radius: 15px;
@@ -28,6 +29,28 @@
     background-color: inherit;
     border: 1.5px solid white;
 }
+
+.textarea {
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 1rem;
+    color: var(--white-black);
+    font-size: 1.2rem;
+    outline: none;
+}
+
+#car-preview {
+    text-align: center;
+}
+
+#car-preview img {
+    max-width: 100px;
+    max-height: 100px;
+    margin: 5px;
+}
+
+
 
 .input:hover,
 .input:focus {

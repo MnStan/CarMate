@@ -13,7 +13,7 @@ function CarCard($content): string
 
     $output .= '<div class="text-container">';
     $output .= '<div class="car-name">' . $content['car-name'] . '</div>';
-    $output .= '<div class="car-price">' . $content['car-price'] . '</div>';
+    $output .= '<div class="car-localization">' . $content['car-lozalization'] . '</div>';
     $output .= '</div>';
 
     $output .= '</div>';

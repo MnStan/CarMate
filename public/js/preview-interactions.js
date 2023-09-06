@@ -8,16 +8,24 @@ avatarButton.addEventListener("click", function(event) {
 });
 
 carInput.addEventListener('change', () => {
-    const file = carInput.files[0];
-    const reader = new FileReader();
+    const files = carInput.files;
 
-    reader.onload = function(event) {
-        carPreview.setAttribute('src', event.target.result);
-        carPreview.style.display = 'block';
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const image = document.createElement('img');
+            image.src = event.target.result;
+            carPreview.appendChild(image);
+        }
+
+        reader.readAsDataURL(file);
     }
 
-    reader.readAsDataURL(file);
+    carPreview.style.display = 'block';
 });
+
 
 // Pobieranie wszystkich elementów z klasą 'editable'
 const editableElements = document.querySelectorAll('.editable');
