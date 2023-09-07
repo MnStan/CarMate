@@ -36,7 +36,9 @@ $formContent = [
     'content' => Input($inputEmail) . Input($inputPassword) . Button($buttonArray)
 ];
 
-$cardContent = Form($formContent) . '<a class="text-center" href="register">Nie nasz jeszcze konta?</a>';
+$onSubmitLoginFunction = 'validateAddCarForm';
+
+$cardContent = Form($formContent, $onSubmitLoginFunction) . '<a class="text-center" href="register">Nie nasz jeszcze konta?</a>';
 
 $cardArray = [
     'title' => 'Logowanie',
@@ -57,6 +59,9 @@ $cardArray = [
 <body>
     <?php include("public/views/components/navbar.php"); ?>
     <main class="login-container container flex flex-center flex-column">
+        <div class="login-error-message">
+        <?php echo $messages['error']; ?>
+        </div>
         <?php echo Card($cardArray); ?>
     </main>
 </body>

@@ -9,17 +9,6 @@
     flex-wrap: wrap;
 }
 
-.tooltip {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    padding: 0.5rem;
-    border-radius: 4px;
-    white-space: nowrap;
-    font-size: 14px;
-    z-index: 9999;
-}
-
 .center-button {
     display: flex;
     justify-content: center;

@@ -10,9 +10,9 @@ require_once __DIR__ . '/../repository/UserRepository.php';
 class CarController extends AppController
 {
     const MAX_FILE_SIZE = 1024 * 1024;
-    const SUPPORTED_TYPES = ['image/png', 'image/jpeg'];
+    const SUPPORTED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
     const UPLOAD_DIRECTORY = '/../public/uploads/';
-    private static $messages = [];
+    private $messages = [];
     private $carRepository;
     private $userRepository;
     private $sessionController;
@@ -30,17 +30,39 @@ class CarController extends AppController
         $cars = $this->getCars(1);
         $main = [];
 
-        // foreach ($cars as $car) {
-        //     $owner = $this->userRepository->getUserById($car->getUserId());
-        //     array_push($main, [$car, $owner]);
-        // }
+        if (!empty($cars)) {
+            foreach ($cars as $car) {
+                $owner = $this->userRepository->getUserById($car->getUserId());
+                array_push($main, [$car, $owner]);
+            }
+        }
 
         $this->render('main', ['main' => $main]);
     }
+    
+    public function carInfo($query = '')
+{
+        $user = $this->sessionController->unserializeUser();
+
+        if (!$user) {
+            $this->redirectToLogin();
+        }
+
+        $defaultCityId = $user->getUserInfo()->getCityId();
+        $defaultCityName = $user->getUserInfo()->getCityName();
+
+        parse_str($query, $query);
+        $carId = intval($query['id']);
+
+        $car = $this->carRepository->getCarById($carId); 
+        $owner = $this->userRepository->getUserById($car->getUserId()); 
+
+        $this->render('carInfo', ['car' => $car, 'owner' => $owner, 'defaultCityId' => $defaultCityId, 'defaultCityName' => $defaultCityName]); 
+}
+
 
     public function addCar()
     {
-
         $this->render('addCar');
     }
 
@@ -54,18 +76,47 @@ class CarController extends AppController
         return $this->carRepository->getCarsByCity($cityId);
     }
 
+    public function changeCity()
+    {
+        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
+
+        if ($contentType !== "application/json") {
+            return;
+        }
+
+        $content = trim(file_get_contents("php://input"));
+
+        header('Content-type: application/json');
+        http_response_code(200);
+
+        echo json_encode($this->carRepository->getCarsByCityAssoc(intval($content)));
+    }
+
     public function addCarForm()
     {
         if (
             !(
                 $this->isPost()
+                && isset($_FILES['avatar'])
                 && is_uploaded_file($_FILES['avatar']['tmp_name'])
                 && $this->validateFile($_FILES['avatar'])
                 && $this->validateTitle($_POST['title'])
             )
         ) {
-            return $this->redirectToHome();
+            if (!$this->isPost()) {
+                $this->messages[] = "Próba przesłania nie została dokonana przez formularz POST.";
+            }
+            if (!isset($_FILES['avatar']) || !is_uploaded_file($_FILES['avatar']['tmp_name'])) {
+                $this->messages[] = "Plik avatar nie został przesłany.";
+            }
+            if (!$this->validateFile($_FILES['avatar'])) {
+                $this->messages[] = "Błąd walidacji pliku avatar.";
+            }
+            if (!$this->validateTitle($_POST['title'])) {
+                $this->messages[] = "Błąd walidacji tytułu.";
+            }
         }
+        
 
         $folderName = $this->carRepository->generateID();
         $newPath = dirname(__DIR__) . self::UPLOAD_DIRECTORY . $folderName;
@@ -73,10 +124,17 @@ class CarController extends AppController
 
         $avatarUrl = $this->carRepository->generateID() . '.' . pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
 
-        move_uploaded_file(
-            $_FILES['avatar']['tmp_name'],
-            $newPath . '/' . $avatarUrl
-        );
+        if (isset($_FILES['avatar']) && is_uploaded_file($_FILES['avatar']['tmp_name'])) {
+            if (move_uploaded_file($_FILES['avatar']['tmp_name'], $newPath . '/' . $avatarUrl)) {
+                $this->messages[] = "Zdjęcie zostało przesłane i zapisane pomyślnie";
+            } else {
+                $lastError = error_get_last();
+                $this->messages[] = 'Błąd podczas zapisywania zdjęcia: ' . $lastError['message'];
+            }
+        } else {
+            $this->messages[] = 'Błąd: Nieprawidłowe przesłane zdjęcie.';
+        }
+        
 
         $photos = [];
         if ($_FILES['photos']) {
@@ -106,30 +164,36 @@ class CarController extends AppController
         return $this->redirectToHome();
     }
 
-    private function validateFile(array $file): bool
+    private function validateFile($file): bool
     {
+        if (!is_array($file)) {
+            $this->messages[] = 'Nieprawidłowy plik lub brak pliku';
+            return false;
+        }
+    
         if ($file['size'] > self::MAX_FILE_SIZE) {
-            array_push(self::$messages, 'Plik jest za duży');
+            $this->messages[] = 'Plik jest za duży';
             return false;
         }
-
-        if (!isset($file['type']) && !in_array($file['type'], self::SUPPORTED_TYPES)) {
-            array_push(self::$messages, 'Rozszerzenie pliku jest niedozwolone');
+    
+        if (!isset($file['type']) || !in_array($file['type'], self::SUPPORTED_TYPES)) {
+            $this->messages[] = 'Rozszerzenie pliku jest niedozwolone';
             return false;
         }
-
+    
         return true;
     }
+    
 
     private function validateTitle(string $title): bool
     {
         if (strlen($title) < 3) {
-            array_push(self::$messages, 'Nazwa jest za krótka');
+            $this->messages[] = 'Nazwa jest za krótka';
             return false;
         }
 
         if (strlen($title) > 50) {
-            array_push(self::$messages, 'Nazwa jest za długa');
+            $this->messages[] = 'Nazwa jest za długa';
             return false;
         }
 

@@ -12,6 +12,7 @@ Routing::get('bookCar', 'DefaultController');
 Routing::get('rentDone', 'DefaultController');
 
 Routing::get('', 'CarController');
+Routing::get('carInfo', 'CarController');
 Routing::get('addCar', 'CarController');
 Routing::post('addCarForm', 'CarController');
 Routing::get('main', 'CarController');
