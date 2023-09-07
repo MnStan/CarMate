@@ -40,6 +40,26 @@ class CarController extends AppController
         $this->render('main', ['main' => $main]);
     }
     
+    public function carInfo($query = '')
+{
+        $user = $this->sessionController->unserializeUser();
+
+        if (!$user) {
+            $this->redirectToLogin();
+        }
+
+        $defaultCityId = $user->getUserInfo()->getCityId();
+        $defaultCityName = $user->getUserInfo()->getCityName();
+
+        parse_str($query, $query);
+        $carId = intval($query['id']);
+
+        $car = $this->carRepository->getCarById($carId); 
+        $owner = $this->userRepository->getUserById($car->getUserId()); 
+
+        $this->render('carInfo', ['car' => $car, 'owner' => $owner, 'defaultCityId' => $defaultCityId, 'defaultCityName' => $defaultCityName]); 
+}
+
 
     public function addCar()
     {

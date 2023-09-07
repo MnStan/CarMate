@@ -14,15 +14,15 @@ $Repository = new Repository;
 $cities = $Repository->getAllCities();
 
 $inputName = [
-    'type' => 'name',
-    'name' => 'nickname',
+    'type' => 'text',
+    'name' => 'name',
     'placeholder' => 'Imię',
     'value' => $messages['name'],
     'image' => 'public/img/input/user-regular.svg',
 ];
 
 $inputSurame = [
-    'type' => 'name',
+    'type' => 'text',
     'name' => 'surname',
     'placeholder' => 'Nazwisko',
     'value' => $messages['surname'],
@@ -30,7 +30,7 @@ $inputSurame = [
 ];
 
 $inputEmail = [
-    'type' => 'name',
+    'type' => 'text',
     'name' => 'email',
     'placeholder' => 'email',
     'value' => $messages['email'],
@@ -44,16 +44,23 @@ $inputPassword = [
     'image' => 'public/img/input/lock-solid.svg',
 ];
 
+$inputPassword2 = [
+    'type' => 'password',
+    'name' => 'password2',
+    'placeholder' => 'Powtórz hasło',
+    'image' => 'public/img/input/lock-solid.svg',
+];
+
 $inputPhone = [
-    'type' => 'tel',
-    'name' => 'phoneNumber',
+    'type' => 'text',
+    'name' => 'phone',
     'placeholder' => 'Numer telefonu',
     'image' => 'public/img/input/phone-solid.svg',
 ];
 
 $inputAdress = [
-    'type' => 'adress',
-    'name' => 'adress',
+    'type' => 'text',
+    'name' => 'address',
     'placeholder' => 'Podaj adres',
     'image' => 'public/img/input/location-dot-solid.svg',
 ];
@@ -75,7 +82,7 @@ $selectCity .= '</select>
 $formContent = [
     'action' => 'checkRegister',
     'method' => 'POST',
-    'content' => Input($inputName) . Input($inputSurame) . Input($inputEmail) . Input($inputPassword) . Input($inputPhone) . $selectCity . Input($inputAdress) . Button($buttonArray)
+    'content' => Input($inputName) . Input($inputSurame) . Input($inputEmail) . Input($inputPassword) . Input($inputPassword2) . Input($inputPhone) . $selectCity . Input($inputAdress) . Button($buttonArray)
 ];
 
 $onSubmitFunction = 'validateRegisterForm';

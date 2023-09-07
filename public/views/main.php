@@ -53,6 +53,7 @@ $cardArray = [
                 $cardContent2 = $image;
                 $cardArray2 = [
                     'content' => $cardContent2,
+                    'car' => $car,
                     'car-name' => $car->getCarInfo()->getName(),
                     'car-localization' => $car->getCityName(),
                 ];

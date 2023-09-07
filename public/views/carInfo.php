@@ -20,7 +20,7 @@ $buttonArrayCarInfo = [
 </head>
 
 <body>
-    <?php include("public/views/components/navbar.php"); ?>
+    <!-- <?php include("public/views/components/navbar.php"); ?>
     <main class="container flex flex-center flex-column" style="gap: 1.5rem">
         <div class="car-photo-container">
             <img class="car-photo drop-shadow" src="<?php echo $image ?>">
@@ -64,7 +64,7 @@ $buttonArrayCarInfo = [
             </div>
         </div>
         <?php echo Button($buttonArrayCarInfo); ?>
-    </main>
+    </main> -->
 </body>
 
 </html>
