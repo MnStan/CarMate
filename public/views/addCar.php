@@ -17,7 +17,11 @@ $Repository = new Repository;
 $cities = $Repository->getAllCities();
 
 $addButtonArray = [
-    'value' => 'Dodaj obrazek'
+    'value' => 'Dodaj głowne zdjęcie'
+];
+
+$addButtonArrayPhotos = [
+    'value' => 'Dodaj zdjęcia'
 ];
 
 $buttonArrayCarInfo = [
@@ -30,8 +34,16 @@ $addCarAndPreview = '
 <label for="car-input" class="custom-car-input">
     ' . Button($addButtonArray) . '
 </label>
-<input type="file" name="avatar" accept=".jpg, .jpeg" id="car-input" multiple>
+<input type="file" name="avatar" accept=".jpg, .jpeg" id="car-input">
 <div id="car-preview" class="car-preview" style="display: none;"></div>
+';
+
+$addCarAndPreviewPhotos = '
+<label for="car-input-photos" class="custom-car-input-photos">
+    ' . Button($addButtonArrayPhotos) . '
+</label>
+<input type="file" name="photos[]" accept=".jpg, .jpeg" id="car-input-photos" multiple>
+<div id="car-preview-photos" class="car-preview" style="display: none;"></div>
 ';
 
 
@@ -57,7 +69,7 @@ $addDescription = '
 $formContent = [
     'action' => 'addCarForm',
     'method' => 'POST',
-    'content' => $addCarAndPreview . $inputName . $selectCity . $addDescription . Button($buttonArrayCarInfo)
+    'content' => $addCarAndPreview . $addCarAndPreviewPhotos . $inputName . $selectCity . $addDescription . Button($buttonArrayCarInfo)
 ];
 
 
@@ -80,6 +92,7 @@ $formContent = [
             <?php echo Form($formContent, null); ?>
         </div>
     </main>
+    <script src="public/js/preview-interactions.js"></script>
 </body>
 
 </html>

@@ -13,3 +13,15 @@
     justify-content: center;
     text-align: center;
 }
+
+#prev-button,
+#next-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--primary);
+    color: var(--black-text);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    margin-right: 1rem;
+    transition: var(--default-transition);
+}
