@@ -29,8 +29,8 @@ $registerButtonArray = [
     </div>
     <div class='info-and-buttons flex flex-center flex-column'>
         <h2 class="info-text"> Znajdź swój wymarzony samochód i umów się na jazdę próbną </h2>
-        <?php echo Button($loginButtonArray); ?>
-        <?php echo Button($registerButtonArray); ?>
+        <a href="login"> <?php echo Button($loginButtonArray); ?></a>
+        <a href="register"> <?php echo Button($registerButtonArray); ?></a>
     </div>
 </main>
 </body>

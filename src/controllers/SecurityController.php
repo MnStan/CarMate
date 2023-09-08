@@ -35,7 +35,7 @@ class SecurityController extends AppController
 
         $_SESSION["user_info"] = serialize($user);
 
-        $this->redirectToHome();
+        $this->redirectToMain();
     }
 
     public function checkRegister()

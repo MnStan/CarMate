@@ -39,7 +39,13 @@ class AppController
 
     public function redirectToHome()
     {
-        $url = "http://$_SERVER[HTTP_HOST]";
+        $url = "http://$_SERVER[HTTP_HOST]/unloggedMain";
+        header("Location: {$url}");
+    }
+
+    public function redirectToMain() 
+    {
+        $url = "http://$_SERVER[HTTP_HOST]/main";
         header("Location: {$url}");
     }
 

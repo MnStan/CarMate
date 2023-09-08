@@ -9,6 +9,10 @@ require_once "public/views/components/button.php";
 $SessionController = new SessionController();
 $userIsAuthenticated = $SessionController::isLogged();
 
+if ($SessionController::isLogged() === false) {
+    $SessionController->redirectToHome();
+}
+
 $carController = new CarController();
 $cars = $carController->getCars(1);
 
