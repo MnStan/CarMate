@@ -108,5 +108,6 @@ $cardArray = [
     <main class="login-container container flex flex-center flex-column">
         <?php echo Card($cardArray); ?>
     </main>
+    <?php include('public/views/components/footer.php'); ?>
 </body>
 </html>

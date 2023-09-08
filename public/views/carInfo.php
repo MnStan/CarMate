@@ -117,5 +117,6 @@ foreach ($photos as $photoInfo) {
         modal.style.display = 'none';
     });
 </script>
+    <?php include('public/views/components/footer.php'); ?>
 </body>
 </html>

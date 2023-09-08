@@ -17,6 +17,7 @@
 @import "./bookCar.css";
 @import "./addCar.css";
 @import "./components/select.css";
+@import "./components/footer.css";
 
 * {
     box-sizing: border-box;
