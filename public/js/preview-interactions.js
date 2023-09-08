@@ -8,6 +8,10 @@ avatarButton.addEventListener("click", function(event) {
 });
 
 carInput.addEventListener('change', () => {
+    while (carPreview.firstChild) {
+        carPreview.removeChild(carPreview.firstChild);
+    }
+
     const files = carInput.files;
 
     for (let i = 0; i < files.length; i++) {
@@ -26,34 +30,34 @@ carInput.addEventListener('change', () => {
     carPreview.style.display = 'block';
 });
 
+const carInputPhotos = document.getElementById('car-input-photos');
+const carPreviewPhotos = document.getElementById('car-preview-photos');
+const avatarButtonPhotos = document.querySelector(".custom-car-input-photos button");
 
-// Pobieranie wszystkich elementów z klasą 'editable'
-const editableElements = document.querySelectorAll('.editable');
-
-// Dodanie nasłuchiwacza kliknięcia dla każdego edytowalnego elementu
-editableElements.forEach(editableElement => {
-  editableElement.addEventListener('click', () => {
-    const currentValue = editableElement.innerText;
-
-    const inputField = document.createElement('input');
-    inputField.type = 'text';
-    inputField.value = currentValue;
-
-    editableElement.innerHTML = '';
-    editableElement.appendChild(inputField);
-
-    inputField.focus();
-
-    const saveChanges = () => {
-      const newValue = inputField.value;
-
-      editableElement.innerHTML = newValue;
-
-      inputField.removeEventListener('blur', saveChanges);
-    };
-
-    inputField.addEventListener('blur', saveChanges);
-  });
+avatarButtonPhotos.addEventListener("click", function(event) {
+    event.preventDefault();
+    carInputPhotos.click();
 });
 
+carInputPhotos.addEventListener('change', () => {
+    while (carPreviewPhotos.firstChild) {
+        carPreviewPhotos.removeChild(carPreviewPhotos.firstChild);
+    }
 
+    const files = carInputPhotos.files;
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const image = document.createElement('img');
+            image.src = event.target.result;
+            carPreviewPhotos.appendChild(image);
+        }
+
+        reader.readAsDataURL(file);
+    }
+
+    carPreviewPhotos.style.display = 'block';
+});
