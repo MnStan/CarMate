@@ -1,0 +1,27 @@
+.button {
+    width: 15rem;
+    height: 3rem;
+    padding: var(--m-0-5) 3rem;
+    color: var(--black-text);
+    background-color: var(--primary);
+    border-radius: 10px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: var(--default-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#prev-button,
+#next-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--primary);
+    color: var(--black-text);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    margin-right: 1rem;
+    transition: var(--default-transition);
+}

@@ -1,0 +1,33 @@
+input[type="date"] {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  form {
+    margin-top: 1.5rem;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    color: #333;
+    padding: 0.2rem;
+    border-radius: 3px;
+  }
+  
+  input[type="date"]:valid {
+    border-color: green;
+  }
+  
+  input[type="date"]:invalid {
+    border-color: red;
+  }
+  

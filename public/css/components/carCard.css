@@ -1,0 +1,58 @@
+.car-card {
+    width: 40%;
+}
+
+.car-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--m-2);
+    padding: var(--m-2);
+    border-radius: 10px;
+    background-color: var(--primary);
+}
+
+.car-photo-container {
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+}
+  
+.car-photo {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.text-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+  
+  .car-name {
+    margin-right: auto;
+}
+  
+  .car-price {
+    margin-left: auto;
+}
+
+@media screen and (max-width: 1024px) {
+    .car-card {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .car-card {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .car-card {
+        width: 90%;
+    }
+}
