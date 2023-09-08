@@ -14,20 +14,20 @@ class CarRepository extends Repository
         parent::__construct();
         $this->sessionController = new SessionController();
     }
-    public function getCarsByCity(string $cityId): ?array
+    public function getCarsByCity(string $cityName): ?array
     {
         $stmt = $this->database->connect()->prepare('
-            SELECT DISTINCT c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
-            FROM car c
-            JOIN car_info ci ON c.car_info_id = ci.car_info_id
-            JOIN car_city cc ON c.car_id = cc.car_id
-            JOIN city ON cc.city_id = city.city_id
-            WHERE city.city_id= :cityId
-            ORDER BY c.car_id DESC
-        
-        ');
-        $stmt->bindParam(':cityId', $cityId, PDO::PARAM_INT);
-        $stmt->execute();
+        SELECT DISTINCT c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
+        FROM car c
+        JOIN car_info ci ON c.car_info_id = ci.car_info_id
+        JOIN car_city cc ON c.car_id = cc.car_id
+        JOIN city ON cc.city_id = city.city_id
+        WHERE city.name = :cityName
+        ORDER BY c.car_id DESC
+    ');
+
+    $stmt->bindParam(':cityName', $cityName, PDO::PARAM_STR);
+    $stmt->execute();
 
         $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -64,23 +64,6 @@ class CarRepository extends Repository
         }
 
         return $output;
-    }
-
-    public function getCarsByCityAssoc(string $cityId): ?array
-    {
-        $stmt = $this->database->connect()->prepare('
-            SELECT c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
-            FROM pet c
-            JOIN pet_info ci ON c.pet_info_id = ci.pet_info_id
-            JOIN pet_city cc ON c.pet_id = cc.pet_id
-            JOIN city ON cc.city_id = city.city_id
-            WHERE city.city_id= :cityId
-            ORDER BY c.pet_id DESC
-        ');
-        $stmt->bindParam(':cityId', $cityId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getCarById(string $carId): ?Car
@@ -193,4 +176,60 @@ class CarRepository extends Repository
             ]);
         }
     }
+
+    public function searchCarsByModelOrCity(string $searchTerm): ?array
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT DISTINCT ON (c.car_id) c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
+        FROM car c
+        JOIN car_info ci ON c.car_info_id = ci.car_info_id
+        JOIN car_city cc ON c.car_id = cc.car_id
+        JOIN city ON cc.city_id = city.city_id
+        WHERE ci.name LIKE :searchTerm OR city.name LIKE :searchTerm
+        ORDER BY c.car_id, ci.name ASC
+    ');
+        
+        $searchTerm = '%' . $searchTerm . '%';
+        $stmt->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        if (!$cars) {
+            return null;
+        }
+    
+        $output = [];
+    
+        foreach ($cars as $car) {
+            $photos = $this->getPhotosByCarInfoId(intval($car['car_info_id']));
+    
+            $carInfo = new CarInfo(
+                $car['car_info_id'],
+                $car['name'],
+                $car['description'],
+                $car['directory_url'],
+                $car['avatar_url'],
+                $photos
+            );
+    
+            $newCar = new Car(
+                $car['car_id'],
+                $car['user_id'],
+                $car['car_info_id'],
+                $car['active'],
+                $car['creation_date'],
+                $carInfo,
+                $car['city_id'],
+                $car['city_name']
+            );
+    
+            array_push($output, $newCar);
+        }
+    
+        return $output;
+    }
+    
+
+
 }

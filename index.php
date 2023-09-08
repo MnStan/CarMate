@@ -11,6 +11,8 @@ Routing::get('carInfo', 'CarController');
 Routing::get('addCar', 'CarController');
 Routing::post('addCarForm', 'CarController');
 Routing::get('main', 'CarController');
+Routing::post('searchCars', 'CarController');
+
 
 Routing::get('unloggedMain', 'DefaultController');
 Routing::get('login', 'DefaultController');

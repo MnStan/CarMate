@@ -25,18 +25,18 @@ class CarController extends AppController
         $this->sessionController = new SessionController();
     }
 
-    public function main()
+    public function main($searchResults = [])
     {
-        $cars = $this->getCars(1);
+        $cars = $searchResults;
         $main = [];
-
+    
         if (!empty($cars)) {
             foreach ($cars as $car) {
                 $owner = $this->userRepository->getUserById($car->getUserId());
                 array_push($main, [$car, $owner]);
             }
         }
-
+    
         $this->render('main', ['main' => $main]);
     }
     
@@ -74,22 +74,6 @@ class CarController extends AppController
     public function getCars($cityId)
     {
         return $this->carRepository->getCarsByCity($cityId);
-    }
-
-    public function changeCity()
-    {
-        $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-
-        if ($contentType !== "application/json") {
-            return;
-        }
-
-        $content = trim(file_get_contents("php://input"));
-
-        header('Content-type: application/json');
-        http_response_code(200);
-
-        echo json_encode($this->carRepository->getCarsByCityAssoc(intval($content)));
     }
 
     public function addCarForm()
@@ -199,4 +183,81 @@ class CarController extends AppController
 
         return true;
     }
+
+        public function searchCarsByModelOrCity($searchTerm)
+{
+    $searchTerm = '%' . $searchTerm . '%';
+    $stmt = $this->database->connect()->prepare('
+        SELECT DISTINCT c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
+        FROM car c
+        JOIN car_info ci ON c.car_info_id = ci.car_info_id
+        JOIN car_city cc ON c.car_id = cc.car_id
+        JOIN city ON cc.city_id = city.city_id
+        WHERE ci.name LIKE :searchTerm OR city.name LIKE :searchTerm
+        ORDER BY c.car_id DESC
+    ');
+
+    $stmt->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$cars) {
+        return null;
+    }
+
+    $output = [];
+
+    foreach ($cars as $car) {
+        $photos = $this->getPhotosByCarInfoId(intval($car['car_info_id']));
+
+        $carInfo = new CarInfo(
+            $car['car_info_id'],
+            $car['name'],
+            $car['description'],
+            $car['directory_url'],
+            $car['avatar_url'],
+            $photos
+        );
+
+        $newCar = new Car(
+            $car['car_id'],
+            $car['user_id'],
+            $car['car_info_id'],
+            $car['active'],
+            $car['creation_date'],
+            $carInfo,
+            $car['city_id'],
+            $car['city_name']
+        );
+
+        array_push($output, $newCar);
+    }
+
+    return $output;
+}
+
+public function searchCars()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $searchTerm = $_POST['search'];
+        $carRepository = new CarRepository();
+        $cars = $carRepository->searchCarsByModelOrCity($searchTerm);
+
+        // Przypisz wyniki wyszukiwania do zmiennej
+        $searchResults = $cars;
+        
+        // Przekaz wyniki do widoku main.php
+        include_once "public/views/main.php";
+        exit();
+    } else {
+        echo "Invalid request method.";
+    }
+}
+
+public function getCarsByCity($cityName)
+{
+    return $this->carRepository->getCarsByCity($cityName);
+}
+
 }

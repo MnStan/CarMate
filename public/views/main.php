@@ -15,6 +15,8 @@ if ($SessionController::isLogged() === false) {
 
 $carController = new CarController();
 $cars = $carController->getCars(1);
+$userInfo = $SessionController->unserializeUser();
+$userCity = $userInfo->getUserInfo()->getCityName();
 
 $searchInput = [
     'type' => 'text',
@@ -24,7 +26,7 @@ $searchInput = [
 ];
 
 $formContent = [
-    'action' => 'checkLogin',
+    'action' => 'searchCars', // Zmień akcję na searchCars
     'method' => 'POST',
     'content' => Input($searchInput)
 ];
@@ -50,28 +52,50 @@ $cardArray = [
     <main class="container flex flex-center flex-column" style="gap: 1.5rem">
         <?php echo Card($cardArray); ?>
 
-        <?php if (!empty($cars)) : ?>
-            <?php foreach ($cars as $car) : ?>
-                <?php
-                $image = '<img src="public/uploads/' . $car->getCarInfo()->getDirectoryUrl() . '/' . $car->getCarInfo()->getAvatarUrl() . '">';
-                $cardContent2 = $image;
-                $cardArray2 = [
-                    'content' => $cardContent2,
-                    'car' => $car,
-                    'car-name' => $car->getCarInfo()->getName(),
-                    'car-localization' => $car->getCityName(),
-                ];
-                ?>
+        <?php
 
-                <?php echo CarCard($cardArray2); ?>
-            <?php endforeach; ?>
-        <?php else : ?>
-            <p>Brak dostępnych samochodów.</p>
-        <?php endif; ?>
+if (!empty($searchResults)) {
+    // Wyświetl wyniki wyszukiwania
+    foreach ($searchResults as $car) {
+        $image = '<img src="public/uploads/' . $car->getCarInfo()->getDirectoryUrl() . '/' . $car->getCarInfo()->getAvatarUrl() . '">';
+        $cardContent2 = $image;
+        $cardArray2 = [
+            'content' => $cardContent2,
+            'car' => $car,
+            'car-name' => $car->getCarInfo()->getName(),
+            'car-localization' => $car->getCityName(),
+        ];
+        echo CarCard($cardArray2);
+    }
+} else {
+    // Brak wyników wyszukiwania, więc pobierz pojazdy z miasta użytkownika
+    // Brak wyników wyszukiwania, więc pobierz pojazdy z miasta użytkownika
+    $carsFromUserCity = $carController->getCarsByCity($userCity);
+
+
+    if (!empty($carsFromUserCity)) {
+        // Wyświetl pojazdy z miasta użytkownika
+        foreach ($carsFromUserCity as $car) {
+            $image = '<img src="public/uploads/' . $car->getCarInfo()->getDirectoryUrl() . '/' . $car->getCarInfo()->getAvatarUrl() . '">';
+            $cardContent2 = $image;
+            $cardArray2 = [
+                'content' => $cardContent2,
+                'car' => $car,
+                'car-name' => $car->getCarInfo()->getName(),
+                'car-localization' => $car->getCityName(),
+            ];
+            echo CarCard($cardArray2);
+        }
+    } else {
+        echo "<p>Brak dostępnych samochodów.</p>";
+    }
+}
+
+?>
+
 
     </main>
     <?php include('public/views/components/footer.php'); ?>
 </body>
-
 
 </html>
