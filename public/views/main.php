@@ -70,6 +70,7 @@ $cardArray = [
         <?php endif; ?>
 
     </main>
+    <?php include('public/views/components/footer.php'); ?>
 </body>
 
 

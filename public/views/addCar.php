@@ -93,6 +93,7 @@ $formContent = [
         </div>
     </main>
     <script src="public/js/preview-interactions.js"></script>
+    <?php include('public/views/components/footer.php'); ?>
 </body>
 
 </html>

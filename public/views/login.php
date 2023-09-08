@@ -64,6 +64,7 @@ $cardArray = [
         </div>
         <?php echo Card($cardArray); ?>
     </main>
+    <?php include('public/views/components/footer.php'); ?>
 </body>
 
 </html>

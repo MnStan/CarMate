@@ -33,6 +33,7 @@ $registerButtonArray = [
         <a href="register"> <?php echo Button($registerButtonArray); ?></a>
     </div>
 </main>
+    <?php include('public/views/components/footer.php'); ?>
 </body>
 
 </html>
