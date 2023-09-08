@@ -14,7 +14,6 @@ if ($SessionController::isLogged() === false) {
 }
 
 $carController = new CarController();
-$cars = $carController->getCars(1);
 $userInfo = $SessionController->unserializeUser();
 $userCity = $userInfo->getUserInfo()->getCityName();
 
@@ -26,7 +25,7 @@ $searchInput = [
 ];
 
 $formContent = [
-    'action' => 'searchCars', // Zmień akcję na searchCars
+    'action' => 'searchCars',
     'method' => 'POST',
     'content' => Input($searchInput)
 ];
@@ -37,6 +36,14 @@ $cardArray = [
     'title' => 'Znajdź samochód dla siebie',
     'content' => $cardContent
 ];
+
+$searchResults = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $searchTerm = $_POST['search'];
+    $carRepository = new CarRepository();
+    $searchResults = $carRepository->searchCarsByModelOrCity($searchTerm);
+}
 
 ?>
 
@@ -55,7 +62,6 @@ $cardArray = [
         <?php
 
 if (!empty($searchResults)) {
-    // Wyświetl wyniki wyszukiwania
     foreach ($searchResults as $car) {
         $image = '<img src="public/uploads/' . $car->getCarInfo()->getDirectoryUrl() . '/' . $car->getCarInfo()->getAvatarUrl() . '">';
         $cardContent2 = $image;
@@ -68,13 +74,9 @@ if (!empty($searchResults)) {
         echo CarCard($cardArray2);
     }
 } else {
-    // Brak wyników wyszukiwania, więc pobierz pojazdy z miasta użytkownika
-    // Brak wyników wyszukiwania, więc pobierz pojazdy z miasta użytkownika
-    $carsFromUserCity = $carController->getCarsByCity($userCity);
-
+    $carsFromUserCity = $carController->getAllCars();
 
     if (!empty($carsFromUserCity)) {
-        // Wyświetl pojazdy z miasta użytkownika
         foreach ($carsFromUserCity as $car) {
             $image = '<img src="public/uploads/' . $car->getCarInfo()->getDirectoryUrl() . '/' . $car->getCarInfo()->getAvatarUrl() . '">';
             $cardContent2 = $image;

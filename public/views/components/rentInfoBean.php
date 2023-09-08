@@ -1,7 +1,7 @@
 <?php
 function RentInfo($text, $editable = false, $id = '', $max_length = 50): string
 {
-    $output = '<div class="info-title drop-shadow">';
+    $output = '<div class="container flex flex-center info-title drop-shadow">';
 
     if ($editable) {
         $output .= '<input type="text" class="info-title-content editable" value="' . $text . '" id="' . $id . '">';

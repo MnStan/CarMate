@@ -14,57 +14,125 @@ class CarRepository extends Repository
         parent::__construct();
         $this->sessionController = new SessionController();
     }
-    public function getCarsByCity(string $cityName): ?array
+    public function getCarsByCity(string $cityName = null): ?array
     {
-        $stmt = $this->database->connect()->prepare('
-        SELECT DISTINCT c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
-        FROM car c
-        JOIN car_info ci ON c.car_info_id = ci.car_info_id
-        JOIN car_city cc ON c.car_id = cc.car_id
-        JOIN city ON cc.city_id = city.city_id
-        WHERE city.name = :cityName
-        ORDER BY c.car_id DESC
-    ');
-
-    $stmt->bindParam(':cityName', $cityName, PDO::PARAM_STR);
-    $stmt->execute();
-
-        $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        if ($cityName) {
+            $stmt = $this->database->connect()->prepare('
+                SELECT DISTINCT c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
+                FROM car c
+                JOIN car_info ci ON c.car_info_id = ci.car_info_id
+                JOIN car_city cc ON c.car_id = cc.car_id
+                JOIN city ON cc.city_id = city.city_id
+                WHERE city.name = :cityName
+                ORDER BY c.car_id DESC
+            ');
+    
+            $stmt->bindParam(':cityName', $cityName, PDO::PARAM_STR);
+        } else {
+            $stmt = $this->database->connect()->prepare('
+                SELECT DISTINCT c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
+                FROM car c
+                JOIN car_info ci ON c.car_info_id = ci.car_info_id
+                JOIN car_city cc ON c.car_id = cc.car_id
+                JOIN city ON cc.city_id = city.city_id
+                ORDER BY c.car_id DESC
+            ');
+        }
+    
+        $stmt->execute();
+    
+        $carsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $cars = [];
+    
+        foreach ($carsData as $carData) {
+            $photos = $this->getPhotosByCarInfoId(intval($carData['car_info_id']));
+    
+            $carInfo = new CarInfo(
+                $carData['car_info_id'],
+                $carData['name'],
+                $carData['description'],
+                $carData['directory_url'],
+                $carData['avatar_url'],
+                $photos
+            );
+    
+            $car = new Car(
+                $carData['car_id'],
+                $carData['user_id'],
+                $carData['car_info_id'],
+                $carData['active'],
+                $carData['creation_date'],
+                $carInfo,
+                $carData['city_id'],
+                $carData['city_name']
+            );
+    
+            $cars[] = $car;
+        }
+    
         if (!$cars) {
             return null;
         }
-
-        $output = [];
-
-        foreach ($cars as $car) {
-            $photos = $this->getPhotosByCarInfoId(intval($car['car_info_id']));
-
-            $carInfo = new CarInfo(
-                $car['car_info_id'],
-                $car['name'],
-                $car['description'],
-                $car['directory_url'],
-                $car['avatar_url'],
-                $photos
-            );
-
-            $newCar = new Car(
-                $car['car_id'],
-                $car['user_id'],
-                $car['car_info_id'],
-                $car['active'],
-                $car['creation_date'],
-                $carInfo,
-                $car['city_id'],
-                $car['city_name']
-            );
-
-            array_push($output, $newCar);
-        }
-
-        return $output;
+    
+        return $cars;
     }
+    
+    public function getAllCars(): ?array
+    {
+        $stmt = $this->database->connect()->prepare('
+            SELECT c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
+            FROM car c
+            JOIN car_info ci ON c.car_info_id = ci.car_info_id
+            JOIN car_city cc ON c.car_id = cc.car_id
+            JOIN city ON cc.city_id = city.city_id
+            ORDER BY c.car_id DESC
+        ');
+    
+        $stmt->execute();
+    
+        $carsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $cars = [];
+        $seenCarIds = [];
+    
+        foreach ($carsData as $carData) {
+            $carId = $carData['car_id'];
+            if (!in_array($carId, $seenCarIds)) {
+                $photos = $this->getPhotosByCarInfoId(intval($carData['car_info_id']));
+    
+                $carInfo = new CarInfo(
+                    $carData['car_info_id'],
+                    $carData['name'],
+                    $carData['description'],
+                    $carData['directory_url'],
+                    $carData['avatar_url'],
+                    $photos
+                );
+    
+                $car = new Car(
+                    $carData['car_id'],
+                    $carData['user_id'],
+                    $carData['car_info_id'],
+                    $carData['active'],
+                    $carData['creation_date'],
+                    $carInfo,
+                    $carData['city_id'],
+                    $carData['city_name']
+                );
+    
+                $cars[] = $car;
+                $seenCarIds[] = $carId;
+            }
+        }
+    
+        if (!$cars) {
+            return null;
+        }
+    
+        return $cars;
+    }
+    
+
+
 
     public function getCarById(string $carId): ?Car
     {
@@ -179,57 +247,101 @@ class CarRepository extends Repository
 
     public function searchCarsByModelOrCity(string $searchTerm): ?array
     {
-        $stmt = $this->database->connect()->prepare('
-        SELECT DISTINCT ON (c.car_id) c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
-        FROM car c
-        JOIN car_info ci ON c.car_info_id = ci.car_info_id
-        JOIN car_city cc ON c.car_id = cc.car_id
-        JOIN city ON cc.city_id = city.city_id
-        WHERE ci.name LIKE :searchTerm OR city.name LIKE :searchTerm
-        ORDER BY c.car_id, ci.name ASC
-    ');
-        
         $searchTerm = '%' . $searchTerm . '%';
-        $stmt->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
-        $stmt->execute();
-
-        $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-        if (!$cars) {
-            return null;
-        }
+        $stmtCity = $this->database->connect()->prepare('
+            SELECT DISTINCT ON (c.car_id) c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
+            FROM car c
+            JOIN car_info ci ON c.car_info_id = ci.car_info_id
+            JOIN car_city cc ON c.car_id = cc.car_id
+            JOIN city ON cc.city_id = city.city_id
+            WHERE city.name LIKE :searchTerm
+            ORDER BY c.car_id, ci.name ASC
+        ');
     
-        $output = [];
+        $stmtCity->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+        $stmtCity->execute();
     
-        foreach ($cars as $car) {
-            $photos = $this->getPhotosByCarInfoId(intval($car['car_info_id']));
+        $carsCityData = $stmtCity->fetchAll(PDO::FETCH_ASSOC);
+        $carsCity = [];
+    
+        foreach ($carsCityData as $carData) {
+            $photos = $this->getPhotosByCarInfoId(intval($carData['car_info_id']));
     
             $carInfo = new CarInfo(
-                $car['car_info_id'],
-                $car['name'],
-                $car['description'],
-                $car['directory_url'],
-                $car['avatar_url'],
+                $carData['car_info_id'],
+                $carData['name'],
+                $carData['description'],
+                $carData['directory_url'],
+                $carData['avatar_url'],
                 $photos
             );
     
-            $newCar = new Car(
-                $car['car_id'],
-                $car['user_id'],
-                $car['car_info_id'],
-                $car['active'],
-                $car['creation_date'],
+            $car = new Car(
+                $carData['car_id'],
+                $carData['user_id'],
+                $carData['car_info_id'],
+                $carData['active'],
+                $carData['creation_date'],
                 $carInfo,
-                $car['city_id'],
-                $car['city_name']
+                $carData['city_id'],
+                $carData['city_name']
             );
     
-            array_push($output, $newCar);
+            $carsCity[] = $car;
+        }
+    
+        // Wyszukiwanie po nazwie pojazdu/ogłoszenia
+        $stmtModel = $this->database->connect()->prepare('
+            SELECT DISTINCT ON (c.car_id) c.*, ci.name, ci.description, ci.directory_url, ci.avatar_url, city.city_id, city.name city_name
+            FROM car c
+            JOIN car_info ci ON c.car_info_id = ci.car_info_id
+            JOIN car_city cc ON c.car_id = cc.car_id
+            JOIN city ON cc.city_id = city.city_id
+            WHERE ci.name LIKE :searchTerm
+            ORDER BY c.car_id, ci.name ASC
+        ');
+    
+        $stmtModel->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+        $stmtModel->execute();
+    
+        $carsModelData = $stmtModel->fetchAll(PDO::FETCH_ASSOC);
+        $carsModel = [];
+    
+        foreach ($carsModelData as $carData) {
+            $photos = $this->getPhotosByCarInfoId(intval($carData['car_info_id']));
+    
+            $carInfo = new CarInfo(
+                $carData['car_info_id'],
+                $carData['name'],
+                $carData['description'],
+                $carData['directory_url'],
+                $carData['avatar_url'],
+                $photos
+            );
+    
+            $car = new Car(
+                $carData['car_id'],
+                $carData['user_id'],
+                $carData['car_info_id'],
+                $carData['active'],
+                $carData['creation_date'],
+                $carInfo,
+                $carData['city_id'],
+                $carData['city_name']
+            );
+    
+            $carsModel[] = $car;
+        }
+    
+        // Połącz wyniki zapytań
+        $output = array_merge($carsCity, $carsModel);
+    
+        if (!$output) {
+            return null;
         }
     
         return $output;
     }
     
-
-
 }
