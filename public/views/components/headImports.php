@@ -7,3 +7,6 @@
 <script src="public/js/addCarAlerts.js" defer></script>
 <script src="public/js/validateRegister.js"defer></script>
 <script src="public/js/car-interactions.js"defer></script>
+<script src="public/js/select.js" defer></script>
+<script src="public/js/addCarAlerts.js" defer></script>
+<script src="public/js/validateRegister.js"defer></script>

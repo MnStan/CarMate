@@ -64,8 +64,6 @@ foreach ($photos as $photoInfo) {
     </div>
     <?php echo Button($buttonArrayCarInfo); ?>
 
-
-
     <div id="modal" class="modal">
         <div class="modal-content flex flex-center flex-column">
             <h2>Umów jazdę próbną</h2>
@@ -123,7 +121,6 @@ foreach ($photos as $photoInfo) {
     document.getElementById('heart').addEventListener('click', function () {
     this.style.color = this.style.color === 'red' ? 'black' : 'red';
 });
-
 
 </script>
     <?php include('public/views/components/footer.php'); ?>
