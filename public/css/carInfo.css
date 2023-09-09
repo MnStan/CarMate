@@ -43,13 +43,16 @@
     border-radius: 10px;
 }
 
-@media screen and (max-width: 400px) {
-    #current-photo {
-        max-width: 30%;
-        max-height: 30%;
-    }
+#heart {
+    font-size: 40px;
+    color: black;
+    transition: color 0.2s ease;
 }
 
+#heart:hover {
+    color: red;
+    transform: scale(1.2);
+}
 
 @media screen and (max-width: 700px) {
     #current-photo {
