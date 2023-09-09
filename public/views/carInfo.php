@@ -45,6 +45,7 @@ foreach ($photos as $photoInfo) {
         <div class="container flex flex-center flex row">
             <button id="prev-button" class="button drop-shadow-animate">Poprzednie zdjęcie</button>
             <button id="next-button" class="button drop-shadow-animate">Następne zdjęcie</button>
+            <span id="heart">&#10084;</span>
         </div>
     </div>
     <div class="rent-info container flex flex-center flex-column">
@@ -62,6 +63,8 @@ foreach ($photos as $photoInfo) {
         </div>
     </div>
     <?php echo Button($buttonArrayCarInfo); ?>
+
+
 
     <div id="modal" class="modal">
         <div class="modal-content flex flex-center flex-column">
@@ -116,6 +119,12 @@ foreach ($photos as $photoInfo) {
     closeModalButton.addEventListener('click', () => {
         modal.style.display = 'none';
     });
+
+    document.getElementById('heart').addEventListener('click', function () {
+    this.style.color = this.style.color === 'red' ? 'black' : 'red';
+});
+
+
 </script>
     <?php include('public/views/components/footer.php'); ?>
 </body>
